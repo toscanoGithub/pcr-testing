@@ -10,6 +10,8 @@ import {
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import SearchIcon from "@material-ui/icons/Search";
+import HomeIcon from "@material-ui/icons/Home";
+
 var QRCode = require("qrcode.react");
 
 const useStyles = new makeStyles((theme) => ({
@@ -30,29 +32,41 @@ const useStyles = new makeStyles((theme) => ({
   logo: {
     position: "absolute",
     left: 5,
-    top: 20,
+    top: 5,
     display: "flex",
     alignItems: "center",
-    transform: "rotateZ(-20deg)",
+    justifyContent: "center",
     zoom: 0.8,
   },
 
+  textLogo: {
+    display: "flex",
+    alignItems: "center",
+    // transform: "rotateZ(-20deg)",
+  },
+
   filo: {
-    color: "#666885",
-    fontSize: 18,
+    color: "#35BC99",
     fontWeight: 900,
     textTransform: "lowercase",
+    fontSize: 20,
   },
 
   care: {
-    color: "#35BC99",
-    fontSize: 18,
+    color: "#F50057",
     fontWeight: 900,
     textTransform: "uppercase",
+    fontSize: 20,
+  },
+
+  container: {
+    paddingTop: "10vh",
+    height: "100vh",
+    display: "grid",
+    placeItems: "center",
   },
 
   main: {
-    marginTop: "10vh",
     textAlign: "center",
     padding: 20,
     backgroundColor: "#35BC9970",
@@ -70,7 +84,7 @@ const useStyles = new makeStyles((theme) => ({
     marginTop: 70,
     color: "#fff",
     fontWeight: 700,
-    backgroundColor: "#F9353F",
+    backgroundColor: "#F50057",
     padding: 20,
     borderRadius: 5,
   },
@@ -163,6 +177,15 @@ const useStyles = new makeStyles((theme) => ({
     borderBottom: "1px solid #fff",
     opacity: 0.3,
   },
+
+  homeIcon: {
+    fontSize: 40,
+    marginLeft: 10,
+    zoom: 0.8,
+    marginTop: -5,
+    cursor: "pointer",
+    color: "#000",
+  },
 }));
 const Citizen = () => {
   const classes = useStyles();
@@ -235,84 +258,89 @@ const Citizen = () => {
   return (
     <div className={classes.root}>
       <div className={classes.logo}>
-        <Typography className={classes.filo} variant="h3">
-          Citizen
-        </Typography>
-        <Typography className={classes.care} variant="h3">
-          Care
-        </Typography>
-      </div>
-      <div className={classes.main}>
-        <Typography variant="h1">Welcome to Filocare</Typography>
-        <Typography variant="subtitle1">
-          Please provide us with your CIN or passport number.
-        </Typography>
-        <div className={classes.searchBox}>
-          <input
-            ref={searchRef}
-            onChange={handleSearchChangeInput}
-            type="text"
-            placeholder="CIN or Passport number"
-          />
-          <SearchIcon onClick={handleSearchBtnClicked} />
-        </div>
-      </div>
-
-      <div>
-        {feedback && (
-          <Typography className={classes.feedback} variant="subtitle1">
-            {feedback.message}
+        <div className={classes.textLogo}>
+          <Typography className={classes.filo} variant="h3">
+            Citizen
           </Typography>
+          <Typography className={classes.care} variant="h3">
+            Care
+          </Typography>
+        </div>
+        <HomeIcon onClick={() => navigate("/")} className={classes.homeIcon} />
+      </div>
+      <div className={classes.container}>
+        <div className={classes.main}>
+          <Typography variant="h1">Welcome to Citizen Care</Typography>
+          <Typography variant="subtitle1">
+            Please provide us with your CIN or passport number.
+          </Typography>
+          <div className={classes.searchBox}>
+            <input
+              ref={searchRef}
+              onChange={handleSearchChangeInput}
+              type="text"
+              placeholder="CIN or Passport number"
+            />
+            <SearchIcon onClick={handleSearchBtnClicked} />
+          </div>
+        </div>
+
+        <div>
+          {feedback && (
+            <Typography className={classes.feedback} variant="subtitle1">
+              {feedback.message}
+            </Typography>
+          )}
+        </div>
+        {customer && (
+          <Paper elevation={0} className={classes.customer}>
+            {customer && (
+              <div className={classes.profile}>
+                <div className={classes.profileHeader}>
+                  <img src={`http://robohash.org/${customer.cin}`} />
+                  <div>
+                    <Typography variant="body2">{customer.username}</Typography>
+                    <Typography variant="body2">{customer.cin}</Typography>
+                    <Typography variant="body2">{customer.email}</Typography>
+                  </div>
+
+                  <div className={classes.info}>
+                    <div className={classes.testedBy}>
+                      <Typography variant="body2">
+                        {customer.lab.toUpperCase()}
+                      </Typography>
+                    </div>
+
+                    <div className={classes.testDate}>
+                      <Typography variant="body2">
+                        {new Date(
+                          customer.results[customer.results.length - 1].time
+                        ).toLocaleDateString()}
+                      </Typography>
+                    </div>
+                    <div className={classes.results}>
+                      <Typography variant="subtitle1">
+                        {customer.results[customer.results.length - 1].result}
+                      </Typography>
+                    </div>
+                  </div>
+                </div>
+                <hr className={classes.hr} />
+                <div className={classes.qrCodeWrapper}>
+                  <QRCode
+                    id="QRCode"
+                    size={"70"}
+                    value={`${process.env.REACT_APP_API_URL}api/users/qrcode/${customer.cin}?name=${customer.username}&cin=${customer.cin}&email=${customer.email}&result=${result}&lab=${customer.lab}`}
+                  />
+                  <Button download="#" onClick={download} variant="outlined">
+                    Download
+                  </Button>
+                </div>
+              </div>
+            )}
+          </Paper>
         )}
       </div>
-      {customer && (
-        <Paper elevation={0} className={classes.customer}>
-          {customer && (
-            <div className={classes.profile}>
-              <div className={classes.profileHeader}>
-                <img src={`http://robohash.org/${customer.cin}`} />
-                <div>
-                  <Typography variant="body2">{customer.username}</Typography>
-                  <Typography variant="body2">{customer.cin}</Typography>
-                  <Typography variant="body2">{customer.email}</Typography>
-                </div>
-
-                <div className={classes.info}>
-                  <div className={classes.testedBy}>
-                    <Typography variant="body2">
-                      {customer.lab.toUpperCase()}
-                    </Typography>
-                  </div>
-
-                  <div className={classes.testDate}>
-                    <Typography variant="body2">
-                      {new Date(
-                        customer.results[customer.results.length - 1].time
-                      ).toLocaleDateString()}
-                    </Typography>
-                  </div>
-                  <div className={classes.results}>
-                    <Typography variant="subtitle1">
-                      {customer.results[customer.results.length - 1].result}
-                    </Typography>
-                  </div>
-                </div>
-              </div>
-              <hr className={classes.hr} />
-              <div className={classes.qrCodeWrapper}>
-                <QRCode
-                  id="QRCode"
-                  size={"70"}
-                  value={`${process.env.REACT_APP_API_URL}api/users/qrcode/${customer.cin}?name=${customer.username}&cin=${customer.cin}&email=${customer.email}&result=${result}&lab=${customer.lab}`}
-                />
-                <Button download="#" onClick={download} variant="outlined">
-                  Download
-                </Button>
-              </div>
-            </div>
-          )}
-        </Paper>
-      )}
     </div>
   );
 };
