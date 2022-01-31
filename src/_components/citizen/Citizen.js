@@ -236,7 +236,7 @@ const Citizen = () => {
     <div className={classes.root}>
       <div className={classes.logo}>
         <Typography className={classes.filo} variant="h3">
-          Filo
+          Citizen
         </Typography>
         <Typography className={classes.care} variant="h3">
           Care
