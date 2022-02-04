@@ -153,11 +153,6 @@ const Admin = () => {
         );
       default:
         break;
-      // return (
-      //   <Typography className={classes.nothingToShow} variant="body1">
-      //     Please search or add new customer
-      //   </Typography>
-      // );
     }
   };
 
@@ -199,33 +194,37 @@ const Admin = () => {
   };
   return (
     <div className={classes.root}>
-      <div>
-        {user && <Header />}
+      {user.username ? (
+        <div>
+          {user && <Header />}
 
-        <div className={classes.searchBox}>
-          <input
-            ref={searchRef}
-            onChange={handleSearchChangeInput}
-            type="text"
-            placeholder="CIN or Passport number"
-          />
-          <SearchIcon onClick={handleSearchBtnClicked} />
+          <div className={classes.searchBox}>
+            <input
+              ref={searchRef}
+              onChange={handleSearchChangeInput}
+              type="text"
+              placeholder="CIN or Passport number"
+            />
+            <SearchIcon onClick={handleSearchBtnClicked} />
+          </div>
+          <div className={classes.addButtonWrapper}>
+            <Button
+              disabled={mode === "editing" || mode === "search"}
+              onClick={() => setMode("add")}
+              variant="outlined"
+            >
+              Add new customer
+            </Button>
+          </div>
+
+          <Divider light style={{ margin: "2rem auto", maxWidth: "500px" }} />
+
+          {/* ----------------------------------- MAIN -------------------------------------- */}
+          <div className={classes.main}>{display()}</div>
         </div>
-        <div className={classes.addButtonWrapper}>
-          <Button
-            disabled={mode === "editing" || mode === "search"}
-            onClick={() => setMode("add")}
-            variant="outlined"
-          >
-            Add new customer
-          </Button>
-        </div>
-
-        <Divider light style={{ margin: "2rem auto", maxWidth: "500px" }} />
-
-        {/* ----------------------------------- MAIN -------------------------------------- */}
-        <div className={classes.main}>{display()}</div>
-      </div>
+      ) : (
+        <Typography>Loading...</Typography>
+      )}
     </div>
   );
 };
