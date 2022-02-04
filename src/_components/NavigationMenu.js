@@ -53,6 +53,7 @@ const NavigationMenu = () => {
     setUser(null);
     setCurrentUser(null);
     setMode(null);
+    console.log("navigating to home ----");
     navigate("/");
   };
 
@@ -63,7 +64,7 @@ const NavigationMenu = () => {
       withCredentials: true,
     })
       .then((res) => {
-        // console.log("logout response", res.data);
+        console.log("logout response", res.data);
         removeCookie("jwt");
       })
       .catch((err) => {
