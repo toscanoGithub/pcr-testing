@@ -183,7 +183,7 @@ const AdminLogin = () => {
                 <div className={classes.inputs}>
                   <TextInput
                     placeholder="johndoe_91"
-                    label="Username"
+                    label="Username. EX. dynacare"
                     name="username"
                     type="text"
                     emoji=""
@@ -191,7 +191,7 @@ const AdminLogin = () => {
 
                   <TextInput
                     placeholder="Choose Password"
-                    label="Password"
+                    label="Password. EX. dynacare"
                     name="password"
                     type="password"
                     emoji=""
