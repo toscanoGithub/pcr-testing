@@ -8,6 +8,7 @@ import { useContext, useState } from "react";
 import Cookies from "universal-cookie";
 import axios from "axios";
 import UserContext from "../context/UserContext";
+import LabActionContext from "../context/LabActionContext";
 
 const useStyles = makeStyles((theme) => ({
   menu: {
@@ -44,12 +45,14 @@ const NavigationMenu = () => {
   const { user, setUser } = useContext(UserContext);
   const navigate = useNavigate();
   const [currentUser, setCurrentUser] = useState(null);
+  const { mode, setMode } = useContext(LabActionContext);
 
   const removeCookie = (key) => {
     const cookies = new Cookies();
     cookies.remove(key);
     setUser(null);
     setCurrentUser(null);
+    setMode(null);
     navigate("/");
   };
 
