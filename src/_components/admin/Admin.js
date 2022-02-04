@@ -123,7 +123,7 @@ const Admin = () => {
         withCredentials: true,
       })
         .then((res) => {
-          if (!res.data.username || res.data.isAdmin === "false") {
+          if (!res.data?.username || res.data.isAdmin === "false") {
             navigate("/admin/login");
           } else {
             setUser({ ...res.data });
@@ -194,7 +194,7 @@ const Admin = () => {
   };
   return (
     <div className={classes.root}>
-      {user.username ? (
+      {user?.username ? (
         <div>
           {user && <Header />}
 
