@@ -11,6 +11,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import SearchIcon from "@material-ui/icons/Search";
 import HomeIcon from "@material-ui/icons/Home";
+import Spinner from "../Spinner";
 
 var QRCode = require("qrcode.react");
 
@@ -196,6 +197,7 @@ const Citizen = () => {
   const searchRef = useRef();
   const [qrData, setQrData] = useState();
   const [result, setResult] = useState("Pending");
+  const [loading, setLoading] = useState(null);
 
   useEffect(() => {
     setResult(customer?.results[customer?.results.length - 1]?.result);
@@ -214,6 +216,9 @@ const Citizen = () => {
 
   const handleSearchBtnClicked = async () => {
     if (searchRef.current.value === "") return;
+
+    setLoading(true);
+
     await axios({
       method: "get",
       url: `${process.env.REACT_APP_API_URL}api/users/${searchTerm}`,
@@ -229,6 +234,7 @@ const Citizen = () => {
             setFeedback(null);
           }, 2000);
         } else {
+          setLoading(false);
           setCustomer(res.data.customer);
           console.log(`http://robohash.org/${res.data.customer.cin}`);
           generateQR(res.data.customer);
@@ -340,6 +346,8 @@ const Citizen = () => {
             )}
           </Paper>
         )}
+
+        {loading && <Spinner loading={loading} />}
       </div>
     </div>
   );
